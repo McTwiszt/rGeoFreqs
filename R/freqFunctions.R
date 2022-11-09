@@ -305,7 +305,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
 #' @export
 plotStyloFreqs <- function(df, x = variable, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
   df_melt <- reshape::melt(df)
-  melt_plot <- tidyverse::ggplot(df_melt, aes(x = variable, y = value, fill = var), na.rm = T) +
+  melt_plot <- ggplot2::ggplot(df_melt, aes(x = variable, y = value, fill = var), na.rm = T) +
     geom_boxplot() +
     labs(title= title,
          x = x_title,
