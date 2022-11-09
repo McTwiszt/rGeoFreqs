@@ -89,7 +89,7 @@ getNscAccuracyPlot <- function(type ="w", size = 1, mfw_from = 10, mfw_to = 1000
     current_results = stylo::crossv(training.set = current_dataset, 
                              cv.mode = "leaveoneout", 
                              classification.method = classifier)
-    get_performance = performance.measures(current_results)
+    get_performance = stylo::performance.measures(current_results)
     get_f1 = get_performance$avg.f
     acc = get_performance$accuracy
     f1_all = c(f1_all, get_f1)
