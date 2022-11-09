@@ -19,6 +19,7 @@ importMapData <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), le
 }
 
 subsetMaps <- function(countryList){
+  require(raster)
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
   for(i in mapLevelZero){
     x <- as(i, "Spatial")

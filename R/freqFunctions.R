@@ -303,7 +303,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
 }
 
 #' @export
-plotStyloFreqs <- function(df, x = variable, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F){
+plotStyloFreqs <- function(df, x = variable, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"))){
   df_melt <- reshape::melt(df)
   melt_plot <- ggplot(df_melt, aes(x = variable, y = value, fill = var), na.rm = T) +
     geom_boxplot() +
@@ -313,8 +313,8 @@ plotStyloFreqs <- function(df, x = variable, y = value, fill = var, title = "plo
          fill = fill_title)
   
   if(significance == T){
-    comparisons <- list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)
-    print(melt_plot + ggsignif::geom_signif(data= df_melt, test="wilcox.test", 
+    comparisons <- comparisons, 3, simplify = F)
+    print(melt_plot + ggsignif::geom_signif(data= df_melt, test=test, 
                                             comparisons = comparisons, 
                                             map_signif_level=T, y_position = c(0.25, 0.25, 0.27)) + theme(aspect.ratio = 1))
   }

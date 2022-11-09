@@ -1,4 +1,12 @@
 #' @export
+importMetaXml<- function(metapath){
+  metadata_df <<- metadata_df <- XML::xmlToDataFrame(metapath)
+print("Info: Metadata imported as metadata_df.")
+print("Info:  Please check whether the metadata file contains the columns ´speaker´,´longitude´ and ´latitude´.")
+return(metadata_df)
+}
+
+#' @export
 addMeta <- function(stylodf, metadata_df, idIndex = 1) {
   id_list <- c()
   colNum <- as.numeric(ncol(stylodf))
