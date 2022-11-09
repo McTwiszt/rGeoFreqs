@@ -183,16 +183,16 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
   map_data_combined <- merge(map_df_merged_fortified, map_df_merged@data,
                              by = "id")
   if(scale == F){
-    token_map_borders <- ggplot()+ geom_polygon(data = map_data_combined, aes(x = long, y = lat, group = group , fill = token_mean), color = "black", size = 0.25) + 
-      coord_map(xlim = xlim, ylim = ylim) + borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
+    token_map_borders <- ggplot2::ggplot()+ geom_polygon(data = map_data_combined, ggplot2::aes(x = long, y = lat, group = group , fill = token_mean), color = "black", size = 0.25) + 
+      ggplot2::coord_map(xlim = xlim, ylim = ylim) + ggplot2::borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
       labs(title = title,
            x = "Latitude",
            y = "Longitude",
            fill = fill)
   }
   else{
-    token_map_borders <- ggplot()+ geom_polygon(data = map_data_combined, aes(x = long, y = lat, group = group , fill = z_score), color = "black", size = 0.25) + 
-      coord_map(xlim = xlim, ylim = ylim) + borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
+    token_map_borders <- ggplot2::ggplot()+ geom_polygon(data = map_data_combined, ggplot2::aes(x = long, y = lat, group = group , fill = z_score), color = "black", size = 0.25) + 
+      ggplot2::coord_map(xlim = xlim, ylim = ylim) + ggplot2::borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
       labs(title = title,
            x = "Latitude",
            y = "Longitude",
