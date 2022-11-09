@@ -43,8 +43,8 @@ subsetMaps <- function(countryList){
 
 #' @export
 getMaps <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), levels = 2, localPath = "C:/Users/Admin/Documents/country_codes"){
-  countryList <<- countryList <- importMapData(countries,levels, localPath)
   print("This may take a while ...")
+  countryList <<- countryList <- importMapData(countries,levels, localPath)
   subsetMaps(countryList)
 }
 
