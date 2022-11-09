@@ -307,7 +307,7 @@ plotStyloFreqs <- function(df, x = variable, y = value, fill = var, title = "plo
   df_melt <- reshape::melt(df)
   melt_plot <- ggplot2::ggplot(df_melt, ggplot2::aes(x = variable, y = value, fill = var), na.rm = T) +
     ggplot2::geom_boxplot() +
-    labs(title= title,
+    ggplot2::labs(title= title,
          x = x_title,
          y = y_title,
          fill = fill_title)
