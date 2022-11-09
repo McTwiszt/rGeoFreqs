@@ -1,0 +1,15 @@
+Package: rGeoFreqs
+Title: Create n-Gram Frequency-Tables, Enrich them with Metadata and Plot Frequencies on Maps
+Version: 0.0.0.9000
+Authors@R: 
+    person("Moulay Zaidan", "Lahjouji-Seppälä", , "zaidan.lahjouji@slavistik.uni-freiburg.de", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-6096-4037"))
+Description: This package makes use of the automatically generated n-gram frequency-tables of
+	the package "stylo". It allows e.g. sociolinguistic researchers to browse the frequencies
+	for specific forms, subset the data and connect with metadata of the texts. In addition 
+	it allows to plot the frequencies on political maps, in order to display continua
+	or border effects.
+License: `use_gpl_license()`
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
