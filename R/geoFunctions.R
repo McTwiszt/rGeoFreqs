@@ -77,7 +77,6 @@ getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
   return(df_rich2)
 }
 
-#' @export
 getOblast <- function(df_rich, token, regionMap, stats = median, scale = F){
   e <- terra::extract(regionMap, df_rich[, c('long','lat')])
   df_rich$GID_1 <- e$GID_1 #  geographical ID level 2 = Region

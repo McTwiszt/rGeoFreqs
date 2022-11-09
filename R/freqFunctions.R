@@ -173,7 +173,7 @@ getTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
     colnames(dataframe)[1] <- "Speaker"
     colnames(dataframe)[2] <- "Token_Scaled"
     dataframe2 <-dataframe[order(dataframe$Token_Scaled, decreasing = T),]
-    dataframe2$var <- case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+    dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
                                 grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
                                 grepl("SLO", dataframe2$Speaker) ~ "Slovak")
     
@@ -190,7 +190,7 @@ getTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
     dataframe <- data.frame("Speaker" = subset$Speaker, Token = subset[, token], check.names = F)
     results <<- dataframe <- subset(dataframe, Token > 0)
     dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),] 
-    dataframe2$var <- case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+    dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
                                 grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
                                 grepl("SLO", dataframe2$Speaker) ~ "Slovak")
     dataframe3 <- dataframe2
@@ -226,7 +226,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
       dataframe <- data.frame("Speaker" = subset[,1], "Token_Scaled" = subset[,2], check.names = F)
     }
     dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
-    dataframe2$var <- case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+    dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
                                 grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
                                 grepl("SLO", dataframe2$Speaker) ~ "Slovak")
     regexResult2 <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ) ) ])
@@ -238,7 +238,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
       subset2 <- subset(subset2, subset2$NewCol > 0)
       dataframe22 <- data.frame("Speaker" = subset2[,1], "Token" = subset2$NewCol, check.names = F)
       dataframe22 <-dataframe22[order(dataframe22$Token, decreasing = T),]
-      dataframe22$var <- case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
+      dataframe22$var <- dplyr::case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
                                    grepl("TRA", dataframe22$Speaker) ~ "Transcarpathian",
                                    grepl("SLO", dataframe22$Speaker) ~ "Slovak")
     }
@@ -248,7 +248,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
       subset2 <- subset(subset2, subset2[,2] > 0)
       dataframe22 <- data.frame("Speaker" = subset[,1], "Token" = subset[,2], check.names = F)
       dataframe22 <-dataframe[order(dataframe$Token, decreasing = T),]
-      dataframe2$var <- case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
+      dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
                                   grepl("TRA", dataframe22$Speaker) ~ "Transcarpathian",
                                   grepl("SLO", dataframe22$Speaker) ~ "Slovak")
     }
@@ -265,7 +265,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
       subset <- subset(subset, subset$NewCol > 0)
       dataframe <- data.frame("Speaker" = subset[,1], "Token" = subset$NewCol, check.names = F)
       dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
-      dataframe2$var <- case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+      dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
                                   grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
                                   grepl("SLO", dataframe2$Speaker) ~ "Slovak")
     }
@@ -275,7 +275,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
       subset <- subset(subset, subset[,2] > 0)
       dataframe <- data.frame("Speaker" = subset[,1], "Token" = subset[,2], check.names = F)
       dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
-      dataframe2$var <- case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+      dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
                                   grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
                                   grepl("SLO", dataframe2$Speaker) ~ "Slovak")
     }
