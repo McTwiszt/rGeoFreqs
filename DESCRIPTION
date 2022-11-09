@@ -2,9 +2,9 @@ Package: rGeoFreqs
 Title: Create n-Gram Frequency-Tables, Enrich them with Metadata and Plot Frequencies on Maps
 Version: 0.0.0.9000
 Authors@R:c(
-	person(given = "A.Marcia", family = "Barbosa", "https://modtools.wordpress.com/)", role = c("ctb"), comment = "Author of included dms2dec function"),
-	person(given = "Paul", family = "Melloy", role = c("ctb"), comment = "Author of included dms2dec function"),
-    person(given = "Moulay Zaidan", family = "Lahjouji-Seppälä", "zaidan.lahjouji@slavistik.uni-freiburg.de", role = c("aut", "cre"),
+	person(given = "A.Marcia", family = "Barbosa", email= "https://modtools.wordpress.com/)", role = c("ctb"), comment = "Author of included dms2dec function"),
+	person(given = "Paul", family = "Melloy", email= NULL, role = c("ctb"), comment = "Author of included dms2dec function"),
+    person(given = "Moulay Zaidan", family = "Lahjouji-Seppälä", email= "zaidan.lahjouji@slavistik.uni-freiburg.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6096-4037")))
 Description: This package makes use of the automatically generated n-gram frequency-tables of
 	the package "stylo". It allows e.g. sociolinguistic researchers to browse the frequencies
