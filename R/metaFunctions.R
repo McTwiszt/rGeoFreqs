@@ -1,4 +1,4 @@
-usethat::use_vignette("introduction")#' @export
+#' @export
 addMeta <- function(stylodf, metadata_df, idIndex = 1) {
   id_list <- c()
   colNum <- as.numeric(ncol(stylodf))
