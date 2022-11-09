@@ -22,6 +22,7 @@ Imports:
 	  stylo,
 	  terra,
 	  tidyverse,
+	  magrittr,
 	  XML
 License: `use_gpl_license()`
 Encoding: UTF-8

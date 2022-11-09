@@ -14,6 +14,8 @@ Description: This package makes use of the automatically generated n-gram freque
 Imports: 
 	  dplyr,
 	  geodata,
+	  ggplot2,
+	  magrittr,
 	  methods,
 	  plyr,
 	  raster,
@@ -22,7 +24,6 @@ Imports:
 	  stylo,
 	  terra,
 	  tidyverse,
-	  magrittr,
 	  XML
 License: `use_gpl_license()`
 Encoding: UTF-8
