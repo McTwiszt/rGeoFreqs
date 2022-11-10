@@ -133,13 +133,13 @@ getOblast <- function(df_rich, token, oblastMap, stats = median, scale = F){
 
 #' @export
 mergeRegionMap <- function(map, df){
-  map_merged <-merge(map, df, by.x = "GID_2", by.y = "GID_2")
+  map_merged <-raster::merge(map, df, by.x = "GID_2", by.y = "GID_2")
   map_merged <- map_merged[-1,] # optional! first row is weird in this case
   return(map_merged)
 }
 #' @export
 mergeOblastMap <- function(map, df){
-  map_merged <-merge(map, df, by.x = "GID_1", by.y = "GID_1")
+  map_merged <-raster::merge(map, df, by.x = "GID_1", by.y = "GID_1")
   map_merged <- map_merged[-1,] # optional! first row is weird in this case
   return(map_merged)
 }
