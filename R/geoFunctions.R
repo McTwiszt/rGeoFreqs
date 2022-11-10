@@ -127,7 +127,6 @@ getOblast <- function(df_rich, token, oblastMap, stats = median, scale = F){
     colnames(df_rich2)[1] <- "GID_1"
     colnames(df_rich2)[2] <- "token_mean"
   }
-  test <<- df_rich2
   return(df_rich2)
 }
 
