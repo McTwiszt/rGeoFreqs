@@ -21,6 +21,8 @@ importMapData <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), le
 #' @export
 subsetMaps <- function(countryList){
   require(raster)
+  d = NULL 
+  mapLevel0 <- as(d, "Spatial")
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
   for(z in mapLevelZero){
     x <- as(z, "Spatial")
@@ -42,6 +44,29 @@ subsetMaps <- function(countryList){
   
 }
 
+
+#' @export
+subsetMaps <- function(countryList){
+  require(raster)
+  mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
+  mapLevelNull <- lapply(mapLevelZero, function(x) as(x,"Spatial"))
+  mapLevel0 <- do.call("rbind", mapLevelNull)
+  
+  mapLevelOne <- c(countryList[grepl( "1" , names(countryList))])
+  mapLevelEins <- lapply(mapLevelOne, function(x) as(x,"Spatial"))
+  mapLevel1 <- do.call("rbind", mapLevelEins)
+  
+  mapLevelTwo <- c(countryList[grepl( "2" , names(countryList))])
+  mapLevelZwei <- lapply(mapLevelTwo, function(x) as(x,"Spatial"))
+  mapLevel2 <- do.call("rbind", mapLevelZwei)
+  
+  mapLevel0 <<-mapLevel0
+  mapLevel1 <<-mapLevel1
+  mapLevel2 <<-mapLevel2
+ }
+  
+
+
 #' @export
 getMaps <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), levels = 2, localPath = "C:/Users/Admin/Documents/country_codes"){
   print("This may take a while ...")
@@ -57,13 +82,13 @@ getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
   
   xx <- xx %>%
     group_by(df_rich.GID_2) %>%
-    summarise_at(vars(df_rich...token.), list(name = stats))
+    dplyr::summarise_at(vars(df_rich...token.), list(name = stats))
   if(scale == T){
     token_scaled <- gsub(" ","", paste(token, "_scaled"))
     xx3 <- data.frame(df_rich$GID_2, df_rich[,token_scaled])
     xx4 <- xx3 %>%
       group_by(df_rich.GID_2) %>%
-      summarise_at(vars(df_rich...token_scaled.), list(name = stats))
+      dplyr::summarise_at(vars(df_rich...token_scaled.), list(name = stats))
     xx5<- cbind(xx,xx4$name)
     df_rich2 <- data.frame(xx5)
     colnames(df_rich2)[1] <- "GID_2"
@@ -78,19 +103,19 @@ getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
   return(df_rich2)
 }
 
-getOblast <- function(df_rich, token, regionMap, stats = median, scale = F){
-  e <- terra::extract(regionMap, df_rich[, c('long','lat')])
+getOblast <- function(df_rich, token, oblastMap, stats = median, scale = F){
+  e <- terra::extract(oblastMap, df_rich[, c('long','lat')])
   df_rich$GID_1 <- e$GID_1 #  geographical ID level 2 = Region
   xx <- data.frame(df_rich$GID_1, df_rich[,token])
   xx2 <- xx %>%
     group_by(df_rich.GID_1) %>%
-    summarise_at(vars(df_rich...token.), list(name = stats))
+    dplyr::summarise_at(vars(df_rich...token.), list(name = stats))
   if(scale == T){
     token_scaled <- gsub(" ","", paste(token, "_scaled"))
     xx3 <- data.frame(df_rich$GID_1, df_rich[,token_scaled])
     xx4 <- xx3 %>%
       group_by(df_rich.GID_1) %>%
-      summarise_at(vars(df_rich...token_scaled.), list(name = stats))
+      dplyr::summarise_at(vars(df_rich...token_scaled.), list(name = stats))
     xx5<- cbind(xx2,xx4$name)
     df_rich2 <- data.frame(xx5)
     colnames(df_rich2)[1] <- "GID_1"
