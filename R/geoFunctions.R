@@ -18,6 +18,7 @@ importMapData <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), le
   return(countryList)
 }
 
+#' @export
 subsetMaps <- function(countryList){
   require(raster)
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
