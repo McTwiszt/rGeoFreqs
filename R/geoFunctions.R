@@ -205,7 +205,7 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
     }
   }
   map_df_merged@data$id <- rownames(map_df_merged@data)
-  map_df_merged_fortified <- fortify(map_df_merged, region = "id")
+  map_df_merged_fortified <- ggplot2::fortify(map_df_merged, region = "id")
   map_data_combined <- merge(map_df_merged_fortified, map_df_merged@data,
                              by = "id")
   if(scale == F){
