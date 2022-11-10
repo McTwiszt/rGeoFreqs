@@ -22,18 +22,18 @@ importMapData <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), le
 subsetMaps <- function(countryList){
   require(raster)
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
-  for(i in mapLevelZero){
-    x <- as(i, "Spatial")
+  for(z in mapLevelZero){
+    x <- as(z, "Spatial")
     mapLevel0 <- mapLevel0 %>% rbind(x)
   }
   mapLevelOne<- c(countryList[grepl( "1" , names(countryList))])
-  for(i in mapLevelOne){
-    x <- as(i, "Spatial")
+  for(o in mapLevelOne){
+    x <- as(o, "Spatial")
     mapLevel1 <- mapLevel1 %>% rbind(x)
   }
   mapLevelTwo <- c(countryList[grepl( "2" , names(countryList))])
-  for(i in mapLevelTwo){
-    x <- as(i, "Spatial")
+  for(t in mapLevelTwo){
+    x <- as(t, "Spatial")
     mapLevel2 <- mapLevel2 %>% rbind(x)
   }
   mapLevel0 <<-mapLevel0
