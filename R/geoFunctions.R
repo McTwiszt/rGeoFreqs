@@ -81,13 +81,13 @@ getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
   xx <- data.frame(df_rich$GID_2, df_rich[,token])
   
   xx <- xx %>%
-    group_by(df_rich.GID_2) %>%
+    dplyr::group_by(df_rich.GID_2) %>%
     dplyr::summarise_at(dplyr::vars(df_rich...token.), list(name = stats))
   if(scale == T){
     token_scaled <- gsub(" ","", paste(token, "_scaled"))
     xx3 <- data.frame(df_rich$GID_2, df_rich[,token_scaled])
     xx4 <- xx3 %>%
-      group_by(df_rich.GID_2) %>%
+      dplyr::group_by(df_rich.GID_2) %>%
       dplyr::summarise_at(dplyr::vars(df_rich...token_scaled.), list(name = stats))
     xx5<- cbind(xx,xx4$name)
     df_rich2 <- data.frame(xx5)
@@ -108,13 +108,13 @@ getOblast <- function(df_rich, token, oblastMap, stats = median, scale = F){
   df_rich$GID_1 <- e$GID_1 #  geographical ID level 2 = Region
   xx <- data.frame(df_rich$GID_1, df_rich[,token])
   xx2 <- xx %>%
-    group_by(df_rich.GID_1) %>%
+    dplyr::group_by(df_rich.GID_1) %>%
     dplyr::summarise_at(dplyr::vars(df_rich...token.), list(name = stats))
   if(scale == T){
     token_scaled <- gsub(" ","", paste(token, "_scaled"))
     xx3 <- data.frame(df_rich$GID_1, df_rich[,token_scaled])
     xx4 <- xx3 %>%
-      group_by(df_rich.GID_1) %>%
+      dplyr::group_by(df_rich.GID_1) %>%
       dplyr::summarise_at(dplyr::vars(df_rich...token_scaled.), list(name = stats))
     xx5<- cbind(xx2,xx4$name)
     df_rich2 <- data.frame(xx5)
