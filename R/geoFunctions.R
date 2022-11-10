@@ -24,17 +24,17 @@ subsetMaps <- function(countryList){
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
   for(i in mapLevelZero){
     x <- as(i, "Spatial")
-    mapLevel0 <- x %>% rbind(x)
+    mapLevel0 <- mapLevel0 %>% rbind(x)
   }
   mapLevelOne<- c(countryList[grepl( "1" , names(countryList))])
   for(i in mapLevelOne){
     x <- as(i, "Spatial")
-    mapLevel1 <- x %>% rbind(x)
+    mapLevel1 <- mapLevel1 %>% rbind(x)
   }
   mapLevelTwo <- c(countryList[grepl( "2" , names(countryList))])
   for(i in mapLevelTwo){
     x <- as(i, "Spatial")
-    mapLevel2 <- x %>% rbind(x)
+    mapLevel2 <- mapLevel2 %>% rbind(x)
   }
   mapLevel0 <<-mapLevel0
   mapLevel1 <<-mapLevel1
