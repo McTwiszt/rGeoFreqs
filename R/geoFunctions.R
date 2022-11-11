@@ -19,8 +19,8 @@ importMapData <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), le
 }
 
 #' @export
+#' @import raster
 subsetMaps <- function(countryList){
-  require(raster)
   d = NULL 
   mapLevel0 <- as(d, "Spatial")
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
@@ -46,8 +46,8 @@ subsetMaps <- function(countryList){
 
 
 #' @export
+#' @import raster
 subsetMaps <- function(countryList){
-  require(raster)
   mapLevelZero <- c(countryList[grepl( "0" , names(countryList))])
   mapLevelNull <- lapply(mapLevelZero, function(x) as(x,"Spatial"))
   mapLevel0 <- do.call("rbind", mapLevelNull)
