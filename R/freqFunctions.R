@@ -315,7 +315,7 @@ plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x
   if(significance == T){
     print(melt_plot + ggsignif::geom_signif(data= df_melt, test="wilcox.test", 
                                             comparisons = comparisons, 
-                                            map_signif_level=T, y_position = c(0.25, 0.25, 0.27)) + ggplot2::theme(aspect.ratio = 1))
+                                            map_signif_level=T) + ggplot2::theme(aspect.ratio = 1))
   }
   else{
     suppressWarnings(print(melt_plot))
