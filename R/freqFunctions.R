@@ -69,41 +69,40 @@ getStyloFreqList <- function(type = "w", size = 1, path, corpusfoldername = "cor
 }
 
 #' @export
-getNscAccuracyPlot <- function(type ="w", size = 1, mfw_from = 10, mfw_to = 1000, mfw_by = 10){
+getNscAccuracyPlot2 <- function (type = "w", size = 1, mfw_from = 10, mfw_to = 1000, 
+                                 mfw_by = 10, culling = 0) {
   
-  # perform classification
-  name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
+  name <- gsub(" ", "", paste("styloFreqList", "_", type, "_", 
+                              size))
   freqlist2 <- eval(as.symbol(name))
-  freqlist <- freqlist2[,-1]
-  rownames(freqlist) <- freqlist2[,1]
+  freqlist <- freqlist2[, -1]
+  rownames(freqlist) <- freqlist2[, 1]
   dataset_nFreqs = as.matrix(freqlist)
-  #dataset_nFreqs <- t(dataset_nFreqs)
   mfw_to_test = seq(from = mfw_from, to = mfw_to, by = mfw_by)
   classifier = "nsc"
   f1_all = c()
   acc_all = c()
   
-  x <- for(mfw in mfw_to_test) {
+  x <- for (mfw in mfw_to_test) {
+    data_subset = dataset_nFreqs[, 1:mfw]
+    current_dataset = stylo::perform.culling(data_subset, culling)
     
-    current_dataset = dataset_nFreqs[, 1:mfw]
     current_results = stylo::crossv(training.set = current_dataset, 
-                             cv.mode = "leaveoneout", 
-                             classification.method = classifier)
+                                    cv.mode = "leaveoneout", classification.method = classifier)
     get_performance = stylo::performance.measures(current_results)
     get_f1 = get_performance$avg.f
     acc = get_performance$accuracy
     f1_all = c(f1_all, get_f1)
     acc_all = c(acc_all, acc)
-    
   }
   
-  # plot
-  if(type == "w"){
+  if (type == "w") {
     type_name <- "Word"
-  }  
+  }
   else {
     type_name <- "Character"
   }
+  
   main <- gsub(" "," ", paste("Performance Measures:",type_name , size, "- Grams"))
   x <- gsub(" "," ", paste("Most Frequent",type_name, size, "- Grams"))
   plot(acc_all~ mfw_to_test,
@@ -111,7 +110,8 @@ getNscAccuracyPlot <- function(type ="w", size = 1, mfw_from = 10, mfw_to = 1000
        ylab = "Accuracy", 
        xlab = x, 
        ylim = c(0.4, 1), 
-       col = c("red"), pch = 17, yaxt="n")
+       col = c("red"), pch = 17, yaxt="n",
+       sub = paste("Culled@ ", culling))
   axis(2, at=pretty(acc_all), lab=paste0(pretty(acc_all) * 100, " %"), las=TRUE)
   par(new=TRUE)
   
