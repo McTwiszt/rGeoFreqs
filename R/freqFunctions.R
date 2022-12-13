@@ -69,7 +69,7 @@ getStyloFreqList <- function(type = "w", size = 1, path, corpusfoldername = "cor
 }
 
 #' @export
-getNscAccuracyPlot2 <- function (type = "w", size = 1, mfw_from = 10, mfw_to = 1000, 
+getNscAccuracyPlot <- function (type = "w", size = 1, mfw_from = 10, mfw_to = 1000, 
                                  mfw_by = 10, culling = 0) {
   
   name <- gsub(" ", "", paste("styloFreqList", "_", type, "_", 
