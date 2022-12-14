@@ -145,11 +145,11 @@ mergeOblastMap <- function(map, df){
 
 
 #' @export
-plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats = median, scale = F, metadata = metadata_df, map_level = 2,  title = "Title", fill = "Mean relative frequency: token", xlim = c(18, 25), ylim = c(47, 51), regex = F, tokenInWords = ""){
+plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats = median, scale = F, metadata = metadata_df, map_level = 2,  title = "Title", fill = "Mean relative frequency: token", xlim = c(18, 25), ylim = c(47, 51), regex = F, perl = F, tokenInWords = ""){
   if(map_level == 1){
     map = mapLevel1
     if(regex == T){
-      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale)
+      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale, perl)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
@@ -178,7 +178,7 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
   else{
     map = mapLevel2
     if(regex == T){
-      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale)
+      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale, perl)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]

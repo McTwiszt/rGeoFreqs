@@ -201,7 +201,7 @@ getTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
 }
 
 #' @export
-getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F){
+getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
@@ -215,7 +215,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
     freqlist_scaled <- as.data.frame(scale(freqlist[,2:ncol(freqlist)]))
     freqlist <- cbind(freqlist[,1], freqlist_scaled)
     colnames(freqlist)[1] <- "Speaker"
-    results <<- regexResult <- as.data.frame(freqlist[ , grepl( token , names( freqlist ), perl = T ) ])
+    results <<- regexResult <- as.data.frame(freqlist[ , grepl( token , names( freqlist ), perl = perl ) ])
     if(size >1){
       regexResult$NewCol <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
       subset <- cbind(freqlist[,1], regexResult)
@@ -257,7 +257,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
   }
   
   else{
-    results <<- regexResult <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ) ) ])
+    results <<- regexResult <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ), perl = perl ) ])
     if(size >1){
       regexResult$NewCol <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
       subset <- cbind(freqlist1[,1], regexResult)
