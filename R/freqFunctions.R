@@ -257,7 +257,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
   }
   
   else{
-    results <<- regexResult <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ), perl = perl ) ] , freqlist$Speaker) %>% tibble::rownames_to_column(., "Speaker")
+    results <<- regexResult <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ), perl = perl ) ] , freqlist1$Speaker) %>% tibble::rownames_to_column(., "Speaker")
     if(size >1){
       regexResult$NewCol <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
       subset <- cbind(freqlist1[,1], regexResult)
