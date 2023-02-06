@@ -472,12 +472,6 @@ getAllTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
 }
 
 
-debug(getAllTokenFreqs)
-
-znam <- getAllTokenFreqs(type = "w", size = 1, token = "znam", scale = F)
-znam <- getTokenFreqs(type = "w", size = 1, token = "znam", scale = T)
-
-
 
 #' @export
 getAllTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
