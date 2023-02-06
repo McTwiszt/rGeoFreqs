@@ -18,6 +18,7 @@ getStyloFreqList(
   culling.min = 20,
   culling.max = 70,
   culling.incr = 20,
+  mfw.list.cutoff = 5000,
   distance.measure = "eder",
   output = freq_list
 )
