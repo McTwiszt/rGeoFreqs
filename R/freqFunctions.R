@@ -432,7 +432,6 @@ plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x
 #' @export
 signifTests <- function(df, var = "var", depvar = "depvar") {
   var_list <- unique(df[[var]])
-  result_list <- list()
   file <- capture.output(cat(depvar, "tests.txt", sep = "_"))
   cat("Tests Output for feature: ", depvar,  "\n", file = file)
   cat("----------------------------------------------------","\n\n",file = file, append = TRUE)
