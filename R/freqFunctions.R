@@ -304,7 +304,6 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
   return(dataframe2)
 }
 
-#' @export
 getTokenFreqsRegexTEST <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
@@ -411,7 +410,7 @@ getTokenFreqsRegexTEST <- function(type = "w", size = 2, token = "^\\bу\\b.*", 
 }
 
 #' @export
-plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
+plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", test_args = "two.sided", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
   df_melt <- reshape::melt(df)
   melt_plot <- ggplot2::ggplot(df_melt, ggplot2::aes(x = var, y = value, fill = var), na.rm = T) +
     ggplot2::geom_boxplot() +
@@ -421,7 +420,7 @@ plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x
          fill = fill_title)
   
   if(significance == T){
-    print(melt_plot + ggsignif::geom_signif(data= df_melt, test="wilcox.test", 
+    print(melt_plot + ggsignif::geom_signif(data= df_melt, test="wilcox.test", test.args = test_args,
                                             comparisons = comparisons, 
                                             map_signif_level=T) + ggplot2::theme(aspect.ratio = 1))
   }
@@ -430,6 +429,42 @@ plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x
   }
 }
 
+#' @export
+signifTests <- function(df, var = "var", depvar = "depvar") {
+  var_list <- unique(df[[var]])
+  result_list <- list()
+  file <- capture.output(cat(depvar, "tests.txt", sep = "_"))
+  cat("Tests Output for feature: ", depvar,  "\n", file = file)
+  cat("----------------------------------------------------","\n\n",file = file, append = TRUE)
+  for (i in var_list) {
+    df_sub <- subset(df, var != i)
+    col_name <- rlang::enquo(depvar)
+    levene_test <- suppressWarnings(leveneTest(df_sub[[depvar]], df_sub[[var]]))
+    wilcox_test <- suppressWarnings(wilcox.test(value ~ var, reshape2::melt(df_sub), exact = FALSE, alternative = "two.sided"))
+    
+    # export Levene test output
+    cat("Levene Test for:\n", file = file, append = TRUE)
+    cat(unique(df_sub$var), file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n\n", file = file, append = TRUE)
+    capture.output(levene_test, file = file, append = TRUE)
+    cat("\n", file = file, append = TRUE)
+    cat(">", file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n\n", file = file, append = TRUE)
+    # export Wilcoxon test output
+    cat("Wilcoxon-Test for:\n", file = file, append = TRUE)
+    # add 2 newlines
+    cat(unique(df_sub$var), file = file, append = TRUE)
+    capture.output(wilcox_test, file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n\n", file = file, append = TRUE)
+    # add line
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~", file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n\n", file = file, append = TRUE)
+  }
+}
 
 #' @export
 getAllTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
@@ -581,3 +616,4 @@ getAllTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", t
   return(dataframe2)
 }
 
+setwd("C:/Users/Admin/Documents/rGeoFreqs/github/rGeoFreqs/")
