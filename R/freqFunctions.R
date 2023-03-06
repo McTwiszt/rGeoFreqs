@@ -615,5 +615,3 @@ getAllTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", t
   }
   return(dataframe2)
 }
-
-setwd("C:/Users/Admin/Documents/rGeoFreqs/github/rGeoFreqs/")
