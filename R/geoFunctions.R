@@ -145,11 +145,11 @@ mergeOblastMap <- function(map, df){
 
 
 #' @export
-plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats = median, scale = F, metadata = metadata_df, map_level = 2,  title = "Title", fill = "Mean relative frequency: token", xlim = c(18, 25), ylim = c(47, 51), regex = F, perl = F, tokenInWords = ""){
+plotFreqMap2 <- function(type = "c", size = 1, styloFreqList, token = "а", stats = median, scale = F, metadata = metadata_df, map_level = 2,  title = "Title", fill = "Mean relative frequency: token", xlim = c(18, 25), ylim = c(47, 51), regex = F, perl = F, tokenInWords = ""){
   if(map_level == 1){
     map = mapLevel1
     if(regex == T){
-      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale, perl)
+      stylo_freqs <<- df <- getFeatureFreqsRegex2(type, size, token, tokenInWords, scale, perl)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
@@ -164,7 +164,7 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
       map_df_merged <- mergeOblastMap(map, df_rich5)
     }
     else{
-      stylo_freqs <<- df <- getTokenFreqs(type, size, token, scale)
+      stylo_freqs <<- df <- getFeatureFreqs2(type, size, token, scale)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
@@ -178,7 +178,7 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
   else{
     map = mapLevel2
     if(regex == T){
-      stylo_freqs <<- df <- getTokenFreqsRegex(type, size, token, tokenInWords, scale, perl)
+      stylo_freqs <<- df <- getFeatureFreqsRegex2(type, size, token, tokenInWords, scale, perl)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
@@ -193,7 +193,92 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
       map_df_merged <- mergeRegionMap(map, df_rich5)
     }
     else{
-      stylo_freqs <<- df <- getTokenFreqs(type, size, token, scale)
+      stylo_freqs <<- df <- getFeatureFreqs2(type, size, token, scale)
+      df_rich <<- x <- addMeta(df, metadata, 1)
+      df_rich2 <- prepareMetaData(x)
+      df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
+      df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
+      df_rich4 <- transformGeoCoords(df_rich3)
+      df_rich5 <- getRegions(df_rich4, token, map, stats, scale)
+      map_df_merged <- mergeRegionMap(map, df_rich5)
+    }
+  }
+  map_df_merged@data$id <- rownames(map_df_merged@data)
+  map_df_merged_fortified <- ggplot2::fortify(map_df_merged, region = "id")
+  map_data_combined <- merge(map_df_merged_fortified, map_df_merged@data,
+                             by = "id")
+  if(scale == F){
+    token_map_borders <- ggplot2::ggplot()+ ggplot2::geom_polygon(data = map_data_combined, ggplot2::aes(x = long, y = lat, group = group , fill = token_mean), color = "black", size = 0.25) + 
+      ggplot2::coord_map(xlim = xlim, ylim = ylim) + ggplot2::borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
+      ggplot2::labs(title = title,
+           x = "Latitude",
+           y = "Longitude",
+           fill = fill)
+  }
+  else{
+    token_map_borders <- ggplot2::ggplot()+ ggplot2::geom_polygon(data = map_data_combined, ggplot2::aes(x = long, y = lat, group = group , fill = z_score), color = "black", size = 0.25) + 
+      ggplot2::coord_map(xlim = xlim, ylim = ylim) + ggplot2::borders(mapLevel0, colour = "red", size = 0.5) + #+ borders(eu0_shp, colour = "blue")
+      ggplot2::labs(title = title,
+           x = "Latitude",
+           y = "Longitude",
+           fill = fill)
+    
+  }
+  
+  print(token_map_borders)
+  
+}
+
+#' @export
+plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats = median, scale = F, metadata = metadata_df, map_level = 2,  title = "Title", fill = "Mean relative frequency: token", xlim = c(18, 25), ylim = c(47, 51), regex = F, perl = F, tokenInWords = ""){
+  if(map_level == 1){
+    map = mapLevel1
+    if(regex == T){
+      stylo_freqs <<- df <- getFeatureFreqsRegex(type, size, token, tokenInWords, scale, perl)
+      df_rich <<- x <- addMeta(df, metadata, 1)
+      df_rich2 <- prepareMetaData(x)
+      df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
+      df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
+      df_rich4 <- transformGeoCoords(df_rich3)
+      if(tokenInWords == ""){
+        df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
+      }
+      else{
+        df_rich5 <- getOblast(df_rich4, tokenInWords, map, stats, scale)
+      }
+      map_df_merged <- mergeOblastMap(map, df_rich5)
+    }
+    else{
+      stylo_freqs <<- df <- getFeatureFreqs(type, size, token, scale)
+      df_rich <<- x <- addMeta(df, metadata, 1)
+      df_rich2 <- prepareMetaData(x)
+      df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
+      df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
+      df_rich4 <- transformGeoCoords(df_rich3)
+      df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
+      map_df_merged <- mergeOblastMap(map, df_rich5)
+    }
+    
+  }
+  else{
+    map = mapLevel2
+    if(regex == T){
+      stylo_freqs <<- df <- getFeatureFreqsRegex(type, size, token, tokenInWords, scale, perl)
+      df_rich <<- x <- addMeta(df, metadata, 1)
+      df_rich2 <- prepareMetaData(x)
+      df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
+      df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
+      df_rich4 <- transformGeoCoords(df_rich3)
+      if(tokenInWords == ""){
+        df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
+      }
+      else{
+        df_rich5 <- getOblast(df_rich4, tokenInWords, map, stats, scale)
+      }
+      map_df_merged <- mergeRegionMap(map, df_rich5)
+    }
+    else{
+      stylo_freqs <<- df <- getFeatureFreqs(type, size, token, scale)
       df_rich <<- x <- addMeta(df, metadata, 1)
       df_rich2 <- prepareMetaData(x)
       df_rich3 <- df_rich2[!is.na(df_rich2$Age),]

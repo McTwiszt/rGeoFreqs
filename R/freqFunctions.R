@@ -161,7 +161,7 @@ getNscTable <- function(type = "w", size = 1, mfw_min = 10, mfw_max = 150, mfw_i
 }
 
 #' @export
-getTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
+getFeatureFreqs2 <- function(type = "w", size = 1, token = "у", scale = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
@@ -201,7 +201,7 @@ getTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
 }
 
 #' @export
-getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
+getFeatureFreqsRegex2 <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
@@ -304,7 +304,7 @@ getTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", toke
   return(dataframe2)
 }
 
-getTokenFreqsRegexTEST <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
+getFeatureFreqsRegexTEST <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
@@ -410,7 +410,7 @@ getTokenFreqsRegexTEST <- function(type = "w", size = 2, token = "^\\bу\\b.*", 
 }
 
 #' @export
-plotStyloFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", test_args = "two.sided", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
+plotFeatureFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", test_args = "two.sided", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
   df_melt <- reshape::melt(df)
   melt_plot <- ggplot2::ggplot(df_melt, ggplot2::aes(x = var, y = value, fill = var), na.rm = T) +
     ggplot2::geom_boxplot() +
@@ -466,7 +466,7 @@ signifTests <- function(df, var = "var", depvar = "depvar") {
 }
 
 #' @export
-getAllTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
+getFeatureFreqs <- function(type = "w", size = 1, token = "у", scale = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
@@ -508,7 +508,7 @@ getAllTokenFreqs <- function(type = "w", size = 1, token = "у", scale = F){
 
 
 #' @export
-getAllTokenFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
+getFeatureFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
   if(scale == T){
