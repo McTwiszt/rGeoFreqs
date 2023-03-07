@@ -22,4 +22,4 @@ export(prepareMetaData)
 export(signifTests)
 export(subsetMaps)
 import(raster)
-
+importFrom(magrittr,"%>%")
