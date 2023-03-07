@@ -8,9 +8,9 @@
 #' @param size Indicate the name of the corpus folder. Default is "corpus". 
 #' @export
 #' @examples
-#' getStyloFreqList()
+#' getFreqTable()
 #' 
-getStyloFreqList <- function(type = "w", size = 1, path, corpusfoldername = "corpus",  mfw.min = 100, mfw.max = 500, mfw.incr = 100, culling.min = 20, culling.max = 70, culling.incr = 20, mfw.list.cutoff = 5000, distance.measure = "eder",  output = freq_list){
+getFreqTable <- function(type = "w", size = 1, path, corpusfoldername = "corpus",  mfw.min = 100, mfw.max = 500, mfw.incr = 100, culling.min = 20, culling.max = 70, culling.incr = 20, mfw.list.cutoff = 5000, distance.measure = "eder",  output = freq_list){
   # This function creates a stylo frequency list based on predefined settings (type = word or character, size = n-gram size, most frequent words, culling and distance measure.
   # The created frequencylist will automatically be 
   setwd(path)
