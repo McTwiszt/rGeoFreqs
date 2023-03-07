@@ -1,7 +1,7 @@
 Package: rGeoFreqs
 Title: Create n-Gram Frequency-Tables, Enrich them with Metadata and Plot Frequencies on Maps
 Version: 0.0.0.9000
-Authors@R:c(
+Authors@R: c(
 	person(given = "A.Marcia", family = "Barbosa", email= "https://modtools.wordpress.com/)", role = c("ctb"), comment = "Author of included dms2dec function"),
 	person(given = "Paul", family = "Melloy", email= NULL, role = c("ctb"), comment = "Author of included dms2dec function"),
     person(given = "Moulay Zaidan", family = "Lahjouji-Seppälä", email= "zaidan.lahjouji@slavistik.uni-freiburg.de", role = c("aut", "cre"),
@@ -12,19 +12,23 @@ Description: This package makes use of the automatically generated n-gram freque
 	it allows to plot the frequencies on political maps, in order to display continua
 	or border effects.
 Imports: 
-	  dplyr,
-	  geodata,
-	  methods,
-	  plyr,
-	  raster,
-	  reshape,
-	  stargazer,
-	  stylo,
-	  terra,
-	  tidyverse,
-	  magrittr,
-	  XML
+    car,
+    dplyr,
+    geodata,
+    ggplot2,
+    magrittr,
+    methods,
+    plyr,
+    purrr,
+    raster,
+    reshape,
+    stargazer,
+    stylo,
+    terra,
+    XML
 License: `use_gpl_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
+Depends: 
+    tidyverse

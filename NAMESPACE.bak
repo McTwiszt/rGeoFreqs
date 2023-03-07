@@ -22,4 +22,7 @@ export(prepareMetaData)
 export(signifTests)
 export(subsetMaps)
 import(raster)
-
+importFrom(magrittr,"%>%")
+import(car)
+import(tidyverse)
+import(purrr)
