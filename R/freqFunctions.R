@@ -438,7 +438,7 @@ signifTests <- function(df, var = "var", depvar = "depvar") {
   for (i in var_list) {
     df_sub <- subset(df, var != i)
     col_name <- rlang::enquo(depvar)
-    levene_test <- suppressWarnings(leveneTest(df_sub[[depvar]], df_sub[[var]]))
+    levene_test <- suppressWarnings(car::leveneTest(df_sub[[depvar]], df_sub[[var]]))
     wilcox_test <- suppressWarnings(wilcox.test(value ~ var, reshape2::melt(df_sub), exact = FALSE, alternative = "two.sided"))
     
     # export Levene test output
