@@ -430,9 +430,10 @@ plotFeatureFreqs <- function(df, x = var, y = value, fill = var, title = "plot",
 }
 
 #' @export
-signifTests <- function(df, var = "var", depvar = "depvar") {
+signifTests <- function(df, var = "var", depvar = "depvar", path = "") {
   var_list <- unique(df[[var]])
-  file <- capture.output(cat(depvar, "tests.txt", sep = "_"))
+  filename <- capture.output(cat(depvar, "tests.txt", sep = "_"))
+  file <- capture.output(cat(path,"/",filename, sep = ""))
   cat("Tests Output for feature: ", depvar,  "\n", file = file)
   cat("----------------------------------------------------","\n\n",file = file, append = TRUE)
   for (i in var_list) {
