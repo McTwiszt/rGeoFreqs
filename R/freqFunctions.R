@@ -189,12 +189,16 @@ signifTests <- function(df, var = "var", depvar = "depvar", path = "", test.exac
   file <- capture.output(cat(path,"/",filename, sep = ""))
   cat("Tests Output for feature: ", depvar,  "\n", file = file)
   cat("----------------------------------------------------","\n\n",file = file, append = TRUE)
+  rFromWilcox <-function(wilcoxModel, N){
+    z<- qnorm(wilcoxModel$p.value/2)
+    r<- z/ sqrt(N)
+    cat(wilcoxModel$data.name, "Effect Size, r = ", r)
+  }
   for (i in var_list) {
     df_sub <- subset(df, var != i)
     col_name <- rlang::enquo(depvar)
     levene_test <- suppressWarnings(car::leveneTest(df_sub[[depvar]], df_sub[[var]]))
     wilcox_test <- suppressWarnings(wilcox.test(value ~ var, reshape2::melt(df_sub), exact = test.exact, alternative = test.alternative))
-    
     # export Levene test output
     cat("Levene Test for:\n", file = file, append = TRUE)
     cat(unique(df_sub$var), file = file, append = TRUE)
@@ -210,6 +214,17 @@ signifTests <- function(df, var = "var", depvar = "depvar", path = "", test.exac
     # add 2 newlines
     cat(unique(df_sub$var), file = file, append = TRUE)
     capture.output(wilcox_test, file = file, append = TRUE)
+    cat("\n", file = file, append = TRUE)
+    cat(">", file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n", file = file, append = TRUE)
+    # export Effectsize
+    cat("Effect Size for Wilcoxon-Test for:\n", file = file, append = TRUE)
+    # add 2 newlines
+    cat(unique(df_sub$var), file = file, append = TRUE)
+    # add 2 newlines
+    cat("\n", file = file, append = TRUE)
+    capture.output(rFromWilcox(wilcox_test, nrow(reshape2::melt(df_sub))) , file = file, append = TRUE)
     # add 2 newlines
     cat("\n\n", file = file, append = TRUE)
     # add line
