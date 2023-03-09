@@ -162,8 +162,8 @@ getNscTable <- function(type = "w", size = 1, mfw_min = 10, mfw_max = 150, mfw_i
 
 
 #' @export
-plotFeatureFreqs <- function(df, x = var, y = value, fill = var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", test_args = "two.sided", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
-  df_melt <- reshape::melt(df)
+plotFeatureFreqs <- function(df, x = var, y = value, fill = var, measure.var = measure.var, title = "plot", x_title ="", y_title = "Frequency", fill_title = "Variety", significance = F, test = "wilcox.test", test_args = "two.sided", comparisons = list(c("Slovak", "Transcarpathian"), c("Lemko","Transcarpathian"), c("Lemko", "Slovak"), 3, simplify = F)){
+  df_melt <- reshape::melt(df, measure.vars  = measure.var)
   melt_plot <- ggplot2::ggplot(df_melt, ggplot2::aes(x = var, y = value, fill = var), na.rm = T) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(title= title,
@@ -181,8 +181,9 @@ plotFeatureFreqs <- function(df, x = var, y = value, fill = var, title = "plot",
   }
 }
 
+
 #' @export
-signifTests <- function(df, var = "var", depvar = "depvar", path = "") {
+signifTests <- function(df, var = "var", depvar = "depvar", path = "", test.exact = FALSE, test.alternative = "two.sided") {
   var_list <- unique(df[[var]])
   filename <- capture.output(cat(depvar, "tests.txt", sep = "_"))
   file <- capture.output(cat(path,"/",filename, sep = ""))
@@ -192,7 +193,7 @@ signifTests <- function(df, var = "var", depvar = "depvar", path = "") {
     df_sub <- subset(df, var != i)
     col_name <- rlang::enquo(depvar)
     levene_test <- suppressWarnings(car::leveneTest(df_sub[[depvar]], df_sub[[var]]))
-    wilcox_test <- suppressWarnings(wilcox.test(value ~ var, reshape2::melt(df_sub), exact = FALSE, alternative = "two.sided"))
+    wilcox_test <- suppressWarnings(wilcox.test(value ~ var, reshape2::melt(df_sub), exact = test.exact, alternative = test.alternative))
     
     # export Levene test output
     cat("Levene Test for:\n", file = file, append = TRUE)
@@ -217,6 +218,9 @@ signifTests <- function(df, var = "var", depvar = "depvar", path = "") {
     cat("\n\n", file = file, append = TRUE)
   }
 }
+
+
+
 
 #' @export
 getFeatureFreqs <- function(type = "w", size = 1, token = "у", scale = F){
