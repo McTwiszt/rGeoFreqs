@@ -14,7 +14,7 @@ addMeta <- function(stylodf, metadata_df, idIndex = 1) {
   metaNameVector <-  colnames(metadata_df[-idIndex])
   stylodf[,metaNameVector] <- NA
   for(i in 1:length(metadata_df$ID)){
-    if(grepl(toString(metadata_df$ID[i]),  toString(stylodf$Speaker)) && toString(metadata_df$ID[i]) != "NN"){
+    if(grepl(toString(metadata_df$ID[i]),  toString(stylodf$Speaker)) && toString(metadata_df$ID[i]) != "NN" && toString(metadata_df$ID[i]) != "W"  && toString(metadata_df$ID[i]) != "D"  ){
       mr <- as.numeric(mapply(regexpr, toString(metadata_df$ID[i]), stylodf$Speaker))
       names(mr) <- NULL
       matchRow <- which(mr > 0)
