@@ -235,8 +235,6 @@ signifTests <- function(df, var = "var", depvar = "depvar", path = "", test.exac
 }
 
 
-
-
 #' @export
 getFeatureFreqs <- function(type = "w", size = 1, token = "у", scale = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
@@ -278,7 +276,7 @@ getFeatureFreqs <- function(type = "w", size = 1, token = "у", scale = F){
 }
 
 
-getFeatureFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
+getFeatureFreqsRegexAlt <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F){
   name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
   freqlist1 <- eval(as.symbol(name))
 
@@ -376,7 +374,9 @@ getFeatureFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", to
     #dataframe2 <- cbind(dataframe2, dataframe22$Token)
     freqlist_order <-freqlist[order(freqlist$Sum, decreasing = T),]
     dataframe2 <- cbind(dataframe2, freqlist_order$Sum)
-    names(dataframe2)[names(dataframe2) == "freqlist$Sum"] <- "Token"
+    dataframe2$Token_Scaled <- NULL
+    names(dataframe2)[names(dataframe2) == "freqlist_order$Sum"] <- "Token_Scaled"
+    
   }
   
   else{
@@ -438,6 +438,245 @@ getFeatureFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", to
   return(dataframe2)
 }
 
+
+#' @export
+getFeatureFreqsRegex <- function(type = "w", size = 2, token = "^\\bу\\b.*", tokenInWords = "", scale = F, perl = F, var = T, scale_all = F){
+  if(scale_all == F){
+    name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
+    freqlist1 <- eval(as.symbol(name))
+    #normalized frequencies
+    freqlist0 <- as.data.frame(freqlist1)
+    
+    #adds names of columns automatically, if there are more features than one
+    regexResult0 <- as.data.frame(freqlist0[ , grepl( token , names( freqlist0 ), perl = perl) ])
+    if(ncol(regexResult0) == 0){
+      stop("No Match!")
+    }
+    #name of column will be added, if there is only one feature
+    if(ncol(regexResult0) < 2){
+      colnames(regexResult0)[1] <- grep(token, names(freqlist0), value = TRUE)
+    }
+    #adds speaker column 
+    regexResult0 <- cbind(freqlist0[,1],regexResult0)
+    colnames(regexResult0)[1] <- "Speaker"
+    
+    
+    #sums up freqs if there is more than one feature contained
+    if(ncol(regexResult0) > 2 ){
+      regexResult0$Sum <- as.numeric(apply(regexResult0[,2:ncol(regexResult0)], 1, sum))
+    }
+    else{
+      regexResult0$Sum <- regexResult0[,2]
+    }
+    
+    #Scaling of the frequencies, cfeates new DF
+    
+    regexResult0$Sum_scaled <- scale(regexResult0$Sum)
+    
+    #Now we can export the freqlist containing all hits and the scaled sum. 
+    results <<- regexResult0
+    
+    #save that for later
+    regexResult2 <- regexResult0
+    
+    #results <<-  as.data.frame(regexResult, freqlist$Speaker) %>% tibble::rownames_to_column(., "Speaker")
+    
+    dataframe <- data.frame("Speaker" = regexResult0[,1], "Token" = regexResult0[, ncol(regexResult0)-1], "Token_Scaled" = regexResult0[, ncol(regexResult0)]   , check.names = F)
+    dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
+    
+    if (var == T){
+      dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+                                         grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
+                                         grepl("SLO", dataframe2$Speaker) ~ "Slovak")
+      dataframe2 <- dataframe2[,c(1,4,2,3)]
+    }
+    
+    if(scale == F){
+      dataframe2$Token_Scaled <- NULL 
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token"] <- token
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token"] <- tokenInWords
+      return(dataframe2)
+    }
+    
+    else{
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token_Scaled"] <- gsub(" ","", paste(token, "_scaled"))
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token_Scaled"] <- gsub(" ","", paste(tokenInWords, "_scaled"))
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token"] <- token
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token"] <- tokenInWords
+      return(dataframe2)
+    }
+  }
+  else{
+    name <- gsub(" ","", paste("styloFreqList","_", type, "_", size))
+    freqlist1 <- eval(as.symbol(name))
+    
+    #normalized frequencies
+    if(scale == T){
+      freqlist0 <- as.data.frame(freqlist1)
+      #adds names of columns automatically, if there are more features than one
+      regexResult0 <- as.data.frame(freqlist0[ , grepl( token , names( freqlist0 ), perl = perl) ])
+      if(ncol(regexResult0) == 0){
+        stop("No Match!")
+      }
+      #name of column will be added, if there is only one feature
+      if(ncol(regexResult0) < 2){
+        colnames(regexResult0)[1] <- grep(token, names(freqlist0), value = TRUE)
+      }
+      #adds speaker column 
+      regexResult0 <- cbind(freqlist0[,1],regexResult0)
+      colnames(regexResult0)[1] <- "Speaker"
+      
+      #Scaling of the frequencies, cfeates new DF 
+      freqlist_scaled <- as.data.frame(scale(regexResult0[,2:ncol(regexResult0)]))
+      #sums up freqs if there is more than one feature contained
+      if(ncol(freqlist_scaled) >= 2 ){
+        freqlist_scaled$Sum <- as.numeric(apply(freqlist_scaled[,1:ncol(freqlist_scaled)], 1, sum))
+        freqlist <- subset(freqlist_scaled, Sum >= 0)
+      }
+      #skips the summing up process
+      else{
+        freqlist_scaled$Sum <- freqlist_scaled[,1]
+        colnames(freqlist_scaled)[1] <- colnames(regexResult0)[2]
+      }
+      #Adds speaker column and creates new DF- 
+      freqlist <- cbind(regexResult0[,1], freqlist_scaled)
+      colnames(freqlist)[1] <- "Speaker"
+      #Now we can export the freqlist containing all hits and the scaled sum. 
+      results <<- freqlist
+      #We have to process the data further so we can add metadata and sum up all the freqs
+      
+      regexResult <- as.data.frame(freqlist[ , grepl( token , names( freqlist ), perl = perl ) ])
+      if(ncol(regexResult) < 2){
+        colnames(regexResult)[1] <- grep(token, names(freqlist0), value = TRUE)
+      }
+      
+      #save that for later
+      regexResult2 <- regexResult
+      
+      #results <<-  as.data.frame(regexResult, freqlist$Speaker) %>% tibble::rownames_to_column(., "Speaker")
+      if(size > 1){
+        if(ncol(regexResult) > 1){
+          regexResult$Sum <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
+        }
+        else{
+          regexResult$Sum <- regexResult[,1]
+        }
+        subset <- cbind(freqlist[,1], regexResult)
+        dataframe <- data.frame("Speaker" = subset[,1], "Token_Scaled" = subset$Sum, check.names = F)
+      }
+      else{
+        subset <- cbind(freqlist[,1], regexResult)
+        dataframe <- data.frame("Speaker" = subset[,1], "Token_Scaled" = subset[,2], check.names = F)
+      }
+      dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
+      dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+                                         grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
+                                         grepl("SLO", dataframe2$Speaker) ~ "Slovak")
+      #regexResult2 <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ), perl = perl ) ])
+      
+      if(size > 1){
+        if(ncol(regexResult2) > 1){
+          regexResult2$Sum <- as.numeric(apply(regexResult2[,1:ncol(regexResult2)], 1, sum))
+        }
+        else{
+          regexResult2$Sum <- regexResult2[,1]
+        }
+        subset2 <- cbind(freqlist1[,1], regexResult2)
+        names(subset2[,2]) <- token
+        subset2 <- subset(subset2, subset2$Sum >= 0)
+        dataframe22 <- data.frame("Speaker" = subset2[,1], "Token" = subset2$Sum, check.names = F)
+        dataframe22 <-dataframe22[order(dataframe22$Token, decreasing = T),]
+        dataframe22$var <- dplyr::case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
+                                            grepl("TRA", dataframe22$Speaker) ~ "Transcarpathian",
+                                            grepl("SLO", dataframe22$Speaker) ~ "Slovak")
+      }
+      else{
+        subset2 <- cbind(freqlist1[,1], regexResult2)
+        names(subset2[,2]) <- token
+        subset2 <- subset(subset2, subset2[,2] >= 0)
+        dataframe22 <- data.frame("Speaker" = subset[,1], "Token" = subset[,2], check.names = F)
+        dataframe22 <-dataframe[order(dataframe$Token, decreasing = T),]
+        dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe22$Speaker) ~ "Lemko", 
+                                           grepl("TRA", dataframe22$Speaker) ~ "Transcarpathian",
+                                           grepl("SLO", dataframe22$Speaker) ~ "Slovak")
+      }
+      #freqlist$Sum
+      #dataframe2 <- cbind(dataframe2, dataframe22$Token)
+      freqlist_order <-freqlist[order(freqlist$Sum, decreasing = T),]
+      dataframe2 <- cbind(dataframe2, freqlist_order$Sum)
+      dataframe2$Token_Scaled <- NULL
+      names(dataframe2)[names(dataframe2) == "freqlist_order$Sum"] <- "Token_Scaled"
+      
+    }
+    
+    else{
+      regexResult <- as.data.frame(freqlist1[ , grepl( token , names( freqlist1 ), perl = perl )])
+      if(ncol(regexResult) == 0){
+        stop("No Match!")
+      }
+      if(ncol(regexResult) < 2){
+        colnames(regexResult)[1] <- grep(token, names(freqlist1), value = TRUE)
+      }
+      results <<-  as.data.frame(regexResult, freqlist1$Speaker) %>% tibble::rownames_to_column(., "Speaker")
+      if(size >1){
+        if(ncol(regexResult) > 1){
+          regexResult$Sum <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
+        }
+        else{
+          regexResult$Sum <- regexResult[,1]
+        }
+        #regexResult$Sum <- as.numeric(apply(regexResult[,1:ncol(regexResult)], 1, sum))
+        subset <- cbind(freqlist1[,1], regexResult)
+        names(subset[,2]) <- token
+        subset <- subset(subset, subset$Sum >= 0)
+        dataframe <- data.frame("Speaker" = subset[,1], "Token" = subset$Sum, check.names = F)
+        dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
+        dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+                                           grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
+                                           grepl("SLO", dataframe2$Speaker) ~ "Slovak")
+      }
+      else{
+        subset <- cbind(freqlist1[,1], regexResult)
+        names(subset[,2]) <- token
+        subset <- subset(subset, subset[,2] >= 0)
+        dataframe <- data.frame("Speaker" = subset[,1], "Token" = subset[,2], check.names = F)
+        dataframe2 <-dataframe[order(dataframe$Token, decreasing = T),]
+        dataframe2$var <- dplyr::case_when(grepl("LEM", dataframe2$Speaker) ~ "Lemko", 
+                                           grepl("TRA", dataframe2$Speaker) ~ "Transcarpathian",
+                                           grepl("SLO", dataframe2$Speaker) ~ "Slovak")
+      }
+    }
+    if(scale ==T){
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token_Scaled"] <- gsub(" ","", paste(token, "_scaled"))
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token_Scaled"] <- gsub(" ","", paste(tokenInWords, "_scaled"))
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token"] <- token
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token"] <- tokenInWords
+    }
+    else{
+      if(tokenInWords ==""){
+        names(dataframe2)[names(dataframe2) == "Token"] <- token
+        
+      }
+      names(dataframe2)[names(dataframe2) == "Token"] <- tokenInWords
+    }
+    return(dataframe2)
+  }
+}
 
 
 
