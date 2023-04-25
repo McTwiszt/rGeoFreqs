@@ -185,10 +185,10 @@ plotFreqMap2 <- function(type = "c", size = 1, styloFreqList, token = "а", stat
       df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
       df_rich4 <- transformGeoCoords(df_rich3)
       if(tokenInWords == ""){
-        df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
+        df_rich5 <- getRegions(df_rich4, token, map, stats, scale)
       }
       else{
-        df_rich5 <- getOblast(df_rich4, tokenInWords, map, stats, scale)
+        df_rich5 <- getRegions(df_rich4, tokenInWords, map, stats, scale)
       }
       map_df_merged <- mergeRegionMap(map, df_rich5)
     }
@@ -251,9 +251,9 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
     else{
       stylo_freqs <<- df <- getFeatureFreqs(type, size, token, scale)
       df_rich <<- x <- addMeta(df, metadata, 1)
-      df_rich2 <- prepareMetaData(x)
-      df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
-      df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
+      df_rich3 <- prepareMetaData(x)
+      #df_rich3 <- df_rich2[!is.na(df_rich2$Age),]
+      #df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
       df_rich4 <- transformGeoCoords(df_rich3)
       df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
       map_df_merged <- mergeOblastMap(map, df_rich5)
@@ -270,10 +270,10 @@ plotFreqMap <- function(type = "c", size = 1, styloFreqList, token = "а", stats
       df_rich3 <- df_rich3[!is.na(df_rich3$Gender),]
       df_rich4 <- transformGeoCoords(df_rich3)
       if(tokenInWords == ""){
-        df_rich5 <- getOblast(df_rich4, token, map, stats, scale)
+        df_rich5 <- getRegions(df_rich4, token, map, stats, scale)
       }
       else{
-        df_rich5 <- getOblast(df_rich4, tokenInWords, map, stats, scale)
+        df_rich5 <- getRegions(df_rich4, tokenInWords, map, stats, scale)
       }
       map_df_merged <- mergeRegionMap(map, df_rich5)
     }
