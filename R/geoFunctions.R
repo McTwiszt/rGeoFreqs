@@ -78,6 +78,7 @@ getMaps <- function(countries = c("UKR", "PL", "SK", "HU", "RO", "CZ"), levels =
 getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
   e <- terra::extract(regionMap, df_rich[, c('long','lat')])
   df_rich$GID_2 <- e$GID_2 #  geographical ID level 2 = Region
+  df_rich_with_regions <<- df_rich
   xx <- data.frame(df_rich$GID_2, df_rich[,token])
   
   xx <- xx %>%
@@ -106,6 +107,7 @@ getRegions <- function(df_rich, token, regionMap, stats = median, scale = F){
 getOblast <- function(df_rich, token, oblastMap, stats = median, scale = F){
   e <- terra::extract(oblastMap, df_rich[, c('long','lat')])
   df_rich$GID_1 <- e$GID_1 #  geographical ID level 2 = Region
+  df_rich_with_oblasts <<- df_rich
   xx <- data.frame(df_rich$GID_1, df_rich[,token])
   xx2 <- xx %>%
     dplyr::group_by(df_rich.GID_1) %>%
